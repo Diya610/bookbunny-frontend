@@ -13,8 +13,29 @@
 
     <button id="loadBooks">Show Recommended Books</button>
     <ul id="bookList"></ul>
+
+    <button id="logoutBtn" style="margin-top: 20px; background-color: #ffc8dd; border: none; padding: 10px 20px; border-radius: 12px; cursor: pointer;">Logout</button>
   </div>
 
   <script src="script.js"></script>
+
+  <script>
+    const user = localStorage.getItem("username");
+    const h1 = document.querySelector("h1");
+
+    if (!user) {
+      // If not logged in, redirect to login page
+      window.location.href = "login.html";
+    } else {
+      // Greet the user
+      h1.textContent = `Hi ${user} 🐰 Welcome back to BookBunny!`;
+    }
+
+    // Logout button logic
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      localStorage.removeItem("username");
+      window.location.href = "login.html";
+    });
+  </script>
 </body>
 </html>
