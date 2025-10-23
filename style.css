@@ -1,23 +1,44 @@
+/* 🌸 BookBunny Styles with Light/Dark Mode */
+:root {
+  --bg-color: #fff7fa;
+  --text-color: #333;
+  --card-bg: #ffffff;
+  --button-bg: #ffb6c1;
+  --button-hover: #ff90aa;
+  --shadow: rgba(0, 0, 0, 0.1);
+}
+
+/* 🌙 Dark Mode Styles */
+body.dark {
+  --bg-color: #1e1e2f;
+  --text-color: #f8f8ff;
+  --card-bg: #2a2a3d;
+  --button-bg: #9b89b3;
+  --button-hover: #b39ddb;
+  --shadow: rgba(255, 255, 255, 0.1);
+}
+
 body {
   font-family: "Poppins", sans-serif;
-  background: linear-gradient(135deg, #ffe4ec, #fff7f9);
+  background: var(--bg-color);
+  color: var(--text-color);
   text-align: center;
-  color: #333;
   margin: 0;
   padding: 0;
+  transition: background 0.3s, color 0.3s;
 }
 
 .container {
-  max-width: 600px;
+  max-width: 700px;
   margin: 100px auto;
-  background: #fff;
+  background: var(--card-bg);
   border-radius: 20px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 20px var(--shadow);
   padding: 40px;
 }
 
 button {
-  background: #ffb6c1;
+  background: var(--button-bg);
   border: none;
   padding: 10px 20px;
   border-radius: 12px;
@@ -27,7 +48,15 @@ button {
 }
 
 button:hover {
-  background: #ff90aa;
+  background: var(--button-hover);
+}
+
+input, textarea {
+  width: 80%;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
 }
 
 ul {
@@ -36,8 +65,9 @@ ul {
 }
 
 li {
-  background: #fff0f5;
+  background: var(--card-bg);
   margin: 10px;
   padding: 12px;
   border-radius: 10px;
+  box-shadow: 0 2px 8px var(--shadow);
 }
