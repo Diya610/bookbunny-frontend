@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Details 📘 | BookBunny</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- 🌙 Light/Dark Toggle -->
+  <button id="themeToggle" style="position:fixed;top:20px;right:20px;">🌙 Dark Mode</button>
+
+  <div class="container" id="details">
+    Loading book info... 🐇✨
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+
+    async function loadBook() {
+      const res = await fetch(`https://openlibrary.org/works/${id}.json`);
+      const book = await res.json();
+
+      const title = book.title || "No title";
+      const desc = (book.description && book.description.value) || "No description available 🐰";
+      const pages = book.pagination || "Unknown pages";
+      const year = book.created ? new Date(book.created.value).getFullYear() : "N/A";
+      const series = book.series ? book.series.join(", ") : "Not part of a series";
+
+      document.getElementById("details").innerHTML = `
+        <h1>${title}</h1>
+        <p><strong>Description:</strong> ${desc}</p>
+        <p><strong>Pages:</strong> ${pages}</p>
+        <p><strong>First Published:</strong> ${year}</p>
+        <p><strong>Series:</strong> ${series}</p>
+
+        <label>⭐ Rate this book:</label>
+        <input type="number" id="rating" min="0" max="5" step="0.25" placeholder="0-5 (decimals allowed)">
+        <br>
+        <textarea id="review" placeholder="Write your review..."></textarea>
+        <br>
+        <button onclick="alert('Feature coming soon!')">Submit Review</button>
+        <button onclick="alert('Added to favorites ❤️')">Add to Favorites</button>
+        <br><br>
+        <a href="search.html">← Back to Search</a>
+      `;
+    }
+
+    loadBook();
+  </script>
+
+  <!-- Theme Script -->
+  <script>
+    const toggle = document.getElementById("themeToggle");
+    if (localStorage.getItem("theme")==="dark"){
+      document.body.classList.add("dark");
+      toggle.textContent="☀️ Light Mode";
+    }
+    toggle.addEventListener("click",()=>{
+      document.body.classList.toggle("dark");
+      let d=document.body.classList.contains("dark");
+      toggle.textContent=d?"☀️ Light Mode":"🌙 Dark Mode";
+      localStorage.setItem("theme",d?"dark":"light");
+    });
+  </script>
+
+</body>
+</html>
