@@ -183,3 +183,40 @@ a:hover {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
+.favBtn {
+  background: #ff7aa2;
+  margin: 6px;
+  padding: 8px 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.favBtn:hover {
+  background: #ff598b;
+}
+
+.reviewBtn {
+  background: #a29bfe;
+  margin: 6px;
+  padding: 8px 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.reviewBtn:hover {
+  background: #7f71ff;
+}
+
+.goodreads-btn {
+  display: inline-block;
+  margin-top: 8px;
+  background: #e2eafc;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  text-decoration: none;
+}
+.goodreads-btn:hover {
+  background: #d1daf8;
+}
+
