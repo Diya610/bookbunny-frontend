@@ -27,12 +27,22 @@
   <ul id="bookList"></ul>
 </div>
 
+<!-- ✅ Review Modal -->
+<div id="reviewModal" class="modal">
+  <div class="modal-content">
+    <h3>Write a Review ✍</h3>
+    <textarea id="reviewText" placeholder="Share your thoughts…" maxlength="300"></textarea>
+    <br>
+    <button id="saveReviewBtn" class="main-btn">Save Review ✅</button>
+    <button id="closeModalBtn" class="reviewBtn">Cancel</button>
+  </div>
+</div>
+
 <script>
 console.log("✅ Home script loaded");
-
 const apiUrl = "https://bookbunny-backend.onrender.com";
 
-// ✅ Username Greeting
+/* ✅ Username Greeting */
 const user = localStorage.getItem("username");
 if (!user) {
   window.location.href = "login.html";
@@ -40,13 +50,13 @@ if (!user) {
   document.getElementById("welcomeTitle").textContent = `Hi ${user} 🐰`;
 }
 
-// ✅ Logout
+/* ✅ Logout */
 document.getElementById("logoutBtn").addEventListener("click", () => {
   localStorage.removeItem("username");
   window.location.href = "login.html";
 });
 
-// ✅ Theme Toggle
+/* ✅ Theme Toggle */
 const btnTheme = document.getElementById("themeToggle");
 if(localStorage.getItem("theme")==="dark"){
   document.body.classList.add("dark");
@@ -58,7 +68,7 @@ btnTheme.addEventListener("click",()=>{
   localStorage.setItem("theme", dark ? "dark" : "light");
 });
 
-// ✅ Recommendations
+/* ✅ Recommendations */
 document.getElementById("loadBooks").addEventListener("click", async () => {
   const res = await fetch(`${apiUrl}/books`);
   const books = await res.json();
@@ -75,7 +85,9 @@ document.getElementById("loadBooks").addEventListener("click", async () => {
   });
 });
 
-// ✅ GLOBAL SEARCH — FINAL
+/* ✅ GLOBAL SEARCH + Reviews + Favorites + Goodreads */
+let activeBookCard = null;
+
 document.getElementById("searchBtn").addEventListener("click", async () => {
   const query = document.getElementById("searchInput").value.trim();
   if (!query) return;
@@ -91,12 +103,13 @@ document.getElementById("searchBtn").addEventListener("click", async () => {
     return;
   }
 
-  data.items.forEach(book => {
+  data.items.forEach((book, index) => {
     const info = book.volumeInfo;
     const goodreadsQuery = encodeURIComponent(info.title + " " + (info.authors?.[0] || ""));
-
+    const itemId = `book-${index}`;
+    
     list.innerHTML += `
-      <li class="book-card">
+      <li class="book-card" id="${itemId}">
         <img src="${info.imageLinks?.thumbnail || ''}" class="book-img">
         <h3>${info.title}</h3>
         <p><strong>Author:</strong> ${info.authors?.join(", ") || "Unknown"}</p>
@@ -107,14 +120,36 @@ document.getElementById("searchBtn").addEventListener("click", async () => {
         <input type="number" min="0" max="5" step="0.25" class="ratingInput" placeholder="0–5"> ⭐
 
         <button class="favBtn">❤️ Add to Favorites</button>
-        <button class="reviewBtn">✍ Add Review</button>
+        <button class="reviewBtn" onclick="openReviewModal('${itemId}')">✍ Add Review</button>
 
         <a href="https://www.goodreads.com/search?q=${goodreadsQuery}" target="_blank" class="goodreads-btn">
           View on Goodreads 🔗
         </a>
+
+        <div class="reviews"></div>
       </li>
     `;
   });
+});
+
+/* ✅ Review Modal Logic */
+function openReviewModal(bookCardId) {
+  activeBookCard = document.getElementById(bookCardId);
+  document.getElementById("reviewModal").style.display = "flex";
+}
+
+document.getElementById("saveReviewBtn").addEventListener("click", () => {
+  const text = document.getElementById("reviewText").value.trim();
+  if (!text) return;
+
+  activeBookCard.querySelector(".reviews").innerHTML += `<p>📝 ${text}</p>`;
+  
+  document.getElementById("reviewText").value = "";
+  document.getElementById("reviewModal").style.display = "none";
+});
+
+document.getElementById("closeModalBtn").addEventListener("click", () => {
+  document.getElementById("reviewModal").style.display = "none";
 });
 </script>
 
