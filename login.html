@@ -1,42 +1,63 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Login</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login | BookBunny 🐇</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h2>Login</h2>
-<input type="email" id="email" placeholder="Email">
-<input type="password" id="password" placeholder="Password">
-<button id="loginBtn">Login</button>
-<p id="msg"></p>
+<!-- 🌙 Theme Toggle -->
+<button id="themeToggle" class="theme-btn">🌙</button>
+
+<div class="container">
+  <h1>Welcome Back 💕</h1>
+  <p>Enter your cozy reading nook 📚</p>
+
+  <input type="email" id="email" placeholder="Email">
+  <input type="password" id="password" placeholder="Password">
+  <button id="loginBtn">Login</button>
+
+  <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
+
+  <p id="msg"></p>
+</div>
 
 <script>
+console.log("✅ Login script loaded");
 const apiUrl = "https://bookbunny-backend.onrender.com";
 
 document.getElementById("loginBtn").addEventListener("click", async () => {
-  document.getElementById("msg").textContent = "Trying...";
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  fetch(`${apiUrl}/login`, {
+  const res = await fetch(`${apiUrl}/login`, {
     method: "POST",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify({ email, password })
-  })
-  .then(r => r.json().then(data => ({ status: r.status, body: data })))
-  .then(res => {
-    document.getElementById("msg").textContent = res.body.message || res.body.error;
-    if (res.status === 200) {
-      localStorage.setItem("username", res.body.user);
-      window.location.href = "index.html";
-    }
-  })
-  .catch(err => {
-    document.getElementById("msg").textContent = "Network error";
-    console.error(err);
   });
+
+  const data = await res.json();
+  document.getElementById("msg").textContent = data.message || data.error;
+
+  if (res.ok) {
+    localStorage.setItem("username", data.user);
+    window.location.href = "index.html";
+  }
+});
+
+// ✅ Theme toggle memory
+const btn = document.getElementById("themeToggle");
+if(localStorage.getItem("theme")==="dark"){
+  document.body.classList.add("dark");
+  btn.textContent="☀️";
+}
+btn.addEventListener("click",()=>{
+  document.body.classList.toggle("dark");
+  let d=document.body.classList.contains("dark");
+  btn.textContent=d?"☀️":"🌙";
+  localStorage.setItem("theme",d?"dark":"light");
 });
 </script>
 
