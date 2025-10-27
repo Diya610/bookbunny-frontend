@@ -108,5 +108,61 @@ li {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
+/* Book card styling */
+.book-card {
+  background: #ffeaf4;
+  padding: 18px;
+  margin: 12px auto;
+  width: 80%;
+  border-radius: 18px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  animation: fadeIn 0.35s ease-in-out;
+}
+
+.main-btn {
+  background: #ffb1c8;
+  border: none;
+  padding: 12px 24px;
+  font-size: 18px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.main-btn:hover {
+  background: #ff94b5;
+}
+
+/* Logout Button */
+.logout {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  padding: 8px 15px;
+  border-radius: 12px;
+  background: #ffafc9;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* Theme Toggle */
+.theme-btn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  border: none;
+  background: #ffd1e5;
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+/* Fade animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 
 
