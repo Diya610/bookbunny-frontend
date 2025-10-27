@@ -219,4 +219,64 @@ a:hover {
 .goodreads-btn:hover {
   background: #d1daf8;
 }
+/* SEARCH + RESULTS */
+#searchInput {
+  width: 80%;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  font-size: 16px;
+  margin-top: 15px;
+}
+
+.book-img {
+  width: 80px;
+  border-radius: 8px;
+  margin-bottom: 6px;
+}
+
+/* Buttons inside card */
+.favBtn {
+  background: #ff7aa2;
+  padding: 7px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  margin: 4px;
+}
+.favBtn:hover { background:#ff598b; }
+
+.reviewBtn {
+  background: #a29bfe;
+  padding: 7px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.reviewBtn:hover { background:#7f71ff; }
+
+.goodreads-btn {
+  display: inline-block;
+  background:#e2eafc;
+  margin-top:8px;
+  padding:8px 14px;
+  font-size:14px;
+  border-radius:12px;
+  text-decoration:none;
+}
+.goodreads-btn:hover { background:#cdd9ff; }
+
+.divider {
+  width:90%;
+  height:2px;
+  margin:25px auto;
+  background:#ffc7df;
+  border-radius:10px;
+}
+
+/* Card Animation */
+@keyframes fadeIn {
+  from { opacity:0; transform:translateY(10px); }
+  to { opacity:1; transform:translateY(0); }
+}
 
