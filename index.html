@@ -12,9 +12,17 @@
 <button id="themeToggle" class="theme-btn">🌙</button>
 
 <div class="container">
-  <h1 id="welcomeTitle">Welcome to BookBunny 🐰</h1>
+  <h1 id="welcomeTitle">Hi Reader 🐰</h1>
   <p>Your cozy corner for book lovers 💕</p>
 
+  <!-- ✅ SEARCH SECTION -->
+  <input type="text" id="searchInput" placeholder="Search for any book in the world...">
+  <button id="searchBtn" class="main-btn">Search 🔍</button>
+  <ul id="searchResults"></ul>
+
+  <hr class="divider">
+
+  <!-- ✅ RECOMMEND SECTION -->
   <button id="loadBooks" class="main-btn">Show Recommended Books ✨</button>
   <ul id="bookList"></ul>
 </div>
@@ -24,7 +32,7 @@ console.log("✅ Home script loaded");
 
 const apiUrl = "https://bookbunny-backend.onrender.com";
 
-// ✅ Personalized greeting
+/* ✅ Personalized Greeting */
 const user = localStorage.getItem("username");
 if (!user) {
   window.location.href = "login.html";
@@ -32,18 +40,31 @@ if (!user) {
   document.getElementById("welcomeTitle").textContent = `Hi ${user} 🐰`;
 }
 
-// ✅ Recommended Books - correct route ✅
-document.getElementById("loadBooks").addEventListener("click", async () => {
-  console.log("📌 Recommended button clicked");
+/* ✅ Logout */
+document.getElementById("logoutBtn").addEventListener("click", () => {
+  localStorage.removeItem("username");
+  window.location.href = "login.html";
+});
 
+/* ✅ Theme Toggle */
+const btnTheme = document.getElementById("themeToggle");
+if(localStorage.getItem("theme")==="dark"){
+  document.body.classList.add("dark");
+  btnTheme.textContent = "☀️";
+}
+btnTheme.addEventListener("click", ()=>{
+  const dark = document.body.classList.toggle("dark");
+  btnTheme.textContent = dark ? "☀️" : "🌙";
+  localStorage.setItem("theme", dark ? "dark" : "light");
+});
+
+/* ✅ Recommended Books */
+document.getElementById("loadBooks").addEventListener("click", async () => {
   const res = await fetch(`${apiUrl}/books`);
   const books = await res.json();
 
-  console.log("📚 Books:", books);
-
   const list = document.getElementById("bookList");
   list.innerHTML = "";
-
   books.forEach(book => {
     const item = document.createElement("li");
     item.classList.add("book-card");
@@ -56,22 +77,36 @@ document.getElementById("loadBooks").addEventListener("click", async () => {
   });
 });
 
-// ✅ Logout
-document.getElementById("logoutBtn").addEventListener("click", () => {
-  localStorage.removeItem("username");
-  window.location.href = "login.html";
-});
+/* ✅ GLOBAL BOOK SEARCH */
+document.getElementById("searchBtn").addEventListener("click", async () => {
+  const query = document.getElementById("searchInput").value;
+  if (!query) return;
 
-// ✅ Theme toggle + saved preference
-const btnTheme = document.getElementById("themeToggle");
-if(localStorage.getItem("theme") === "dark"){
-  document.body.classList.add("dark");
-  btnTheme.textContent = "☀️";
-}
-btnTheme.addEventListener("click", ()=>{
-  const dark = document.body.classList.toggle("dark");
-  btnTheme.textContent = dark ? "☀️" : "🌙";
-  localStorage.setItem("theme", dark ? "dark" : "light");
+  const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}`);
+  const data = await res.json();
+
+  const list = document.getElementById("searchResults");
+  list.innerHTML = "";
+
+  if (!data.items) {
+    list.innerHTML = "<p>No results found 😢</p>";
+    return;
+  }
+
+  data.items.forEach(book => {
+    const info = book.volumeInfo;
+    const item = document.createElement("li");
+    item.classList.add("book-card");
+    item.innerHTML = `
+      <img src="${info.imageLinks?.thumbnail || ''}" class="book-img">
+      <h3>${info.title}</h3>
+      <p><strong>Author:</strong> ${info.authors?.join(", ") || "Unknown"}</p>
+      <p><strong>Published:</strong> ${info.publishedDate || "N/A"}</p>
+      <p><strong>Pages:</strong> ${info.pageCount || "N/A"}</p>
+      <p><strong>Series:</strong> ${info.seriesInfo?.title || "Not part of series"}</p>
+    `;
+    list.appendChild(item);
+  });
 });
 </script>
 
