@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BookBunny 📚🐰</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -15,7 +15,7 @@
   <h1 id="welcomeTitle">Welcome to BookBunny 🐰</h1>
   <p>Your cozy corner for book lovers 💕</p>
 
-  <button id="loadBooks">Show Recommended Books ✨</button>
+  <button id="loadBooks" class="main-btn">Show Recommended Books ✨</button>
   <ul id="bookList"></ul>
 </div>
 
@@ -32,17 +32,17 @@ if (!user) {
   document.getElementById("welcomeTitle").textContent = `Hi ${user} 🐰`;
 }
 
-// ✅ Load book recommendations
+// ✅ Recommended Books - correct route ✅
 document.getElementById("loadBooks").addEventListener("click", async () => {
   console.log("📌 Recommended button clicked");
 
   const res = await fetch(`${apiUrl}/books`);
   const books = await res.json();
 
-  console.log("📚 All books:", books);
+  console.log("📚 Books:", books);
 
   const list = document.getElementById("bookList");
-  list.innerHTML = ""; // clear previous list
+  list.innerHTML = "";
 
   books.forEach(book => {
     const item = document.createElement("li");
@@ -62,17 +62,16 @@ document.getElementById("logoutBtn").addEventListener("click", () => {
   window.location.href = "login.html";
 });
 
-// ✅ Theme toggle
+// ✅ Theme toggle + saved preference
 const btnTheme = document.getElementById("themeToggle");
-if(localStorage.getItem("theme")==="dark"){
+if(localStorage.getItem("theme") === "dark"){
   document.body.classList.add("dark");
-  btnTheme.textContent="☀️";
+  btnTheme.textContent = "☀️";
 }
-btnTheme.addEventListener("click",()=>{
-  document.body.classList.toggle("dark");
-  let d=document.body.classList.contains("dark");
-  btnTheme.textContent=d?"☀️":"🌙";
-  localStorage.setItem("theme",d?"dark":"light");
+btnTheme.addEventListener("click", ()=>{
+  const dark = document.body.classList.toggle("dark");
+  btnTheme.textContent = dark ? "☀️" : "🌙";
+  localStorage.setItem("theme", dark ? "dark" : "light");
 });
 </script>
 
