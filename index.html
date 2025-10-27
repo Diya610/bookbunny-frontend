@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BookBunny 📚🐰</title>
   <link rel="stylesheet" href="style.css">
@@ -15,14 +15,14 @@
   <h1 id="welcomeTitle">Hi Reader 🐰</h1>
   <p>Your cozy corner for book lovers 💕</p>
 
-  <!-- ✅ SEARCH SECTION -->
-  <input type="text" id="searchInput" placeholder="Search for any book in the world...">
+  <!-- ✅ Search Bar -->
+  <input type="text" id="searchInput" placeholder="Search for any book…">
   <button id="searchBtn" class="main-btn">Search 🔍</button>
   <ul id="searchResults"></ul>
 
   <hr class="divider">
 
-  <!-- ✅ RECOMMEND SECTION -->
+  <!-- ✅ Recommendations -->
   <button id="loadBooks" class="main-btn">Show Recommended Books ✨</button>
   <ul id="bookList"></ul>
 </div>
@@ -32,7 +32,7 @@ console.log("✅ Home script loaded");
 
 const apiUrl = "https://bookbunny-backend.onrender.com";
 
-/* ✅ Personalized Greeting */
+// ✅ Username Greeting
 const user = localStorage.getItem("username");
 if (!user) {
   window.location.href = "login.html";
@@ -40,46 +40,44 @@ if (!user) {
   document.getElementById("welcomeTitle").textContent = `Hi ${user} 🐰`;
 }
 
-/* ✅ Logout */
+// ✅ Logout
 document.getElementById("logoutBtn").addEventListener("click", () => {
   localStorage.removeItem("username");
   window.location.href = "login.html";
 });
 
-/* ✅ Theme Toggle */
+// ✅ Theme Toggle
 const btnTheme = document.getElementById("themeToggle");
 if(localStorage.getItem("theme")==="dark"){
   document.body.classList.add("dark");
   btnTheme.textContent = "☀️";
 }
-btnTheme.addEventListener("click", ()=>{
-  const dark = document.body.classList.toggle("dark");
+btnTheme.addEventListener("click",()=>{
+  const dark=document.body.classList.toggle("dark");
   btnTheme.textContent = dark ? "☀️" : "🌙";
   localStorage.setItem("theme", dark ? "dark" : "light");
 });
 
-/* ✅ Recommended Books */
+// ✅ Recommendations
 document.getElementById("loadBooks").addEventListener("click", async () => {
   const res = await fetch(`${apiUrl}/books`);
   const books = await res.json();
-
   const list = document.getElementById("bookList");
   list.innerHTML = "";
   books.forEach(book => {
-    const item = document.createElement("li");
-    item.classList.add("book-card");
-    item.innerHTML = `
-      <h3>${book.title}</h3>
-      <p><strong>Author:</strong> ${book.author}</p>
-      <p><strong>Genre:</strong> ${book.genre}</p>
+    list.innerHTML += `
+      <li class="book-card">
+        <h3>${book.title}</h3>
+        <p><strong>Author:</strong> ${book.author}</p>
+        <p><strong>Genre:</strong> ${book.genre}</p>
+      </li>
     `;
-    list.appendChild(item);
   });
 });
 
-/* ✅ GLOBAL BOOK SEARCH */
+// ✅ GLOBAL SEARCH — FINAL
 document.getElementById("searchBtn").addEventListener("click", async () => {
-  const query = document.getElementById("searchInput").value;
+  const query = document.getElementById("searchInput").value.trim();
   if (!query) return;
 
   const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}`);
@@ -95,17 +93,27 @@ document.getElementById("searchBtn").addEventListener("click", async () => {
 
   data.items.forEach(book => {
     const info = book.volumeInfo;
-    const item = document.createElement("li");
-    item.classList.add("book-card");
-    item.innerHTML = `
-      <img src="${info.imageLinks?.thumbnail || ''}" class="book-img">
-      <h3>${info.title}</h3>
-      <p><strong>Author:</strong> ${info.authors?.join(", ") || "Unknown"}</p>
-      <p><strong>Published:</strong> ${info.publishedDate || "N/A"}</p>
-      <p><strong>Pages:</strong> ${info.pageCount || "N/A"}</p>
-      <p><strong>Series:</strong> ${info.seriesInfo?.title || "Not part of series"}</p>
+    const goodreadsQuery = encodeURIComponent(info.title + " " + (info.authors?.[0] || ""));
+
+    list.innerHTML += `
+      <li class="book-card">
+        <img src="${info.imageLinks?.thumbnail || ''}" class="book-img">
+        <h3>${info.title}</h3>
+        <p><strong>Author:</strong> ${info.authors?.join(", ") || "Unknown"}</p>
+        <p><strong>Published:</strong> ${info.publishedDate || "N/A"}</p>
+        <p><strong>Pages:</strong> ${info.pageCount || "N/A"}</p>
+
+        <label><strong>Your Rating:</strong></label>
+        <input type="number" min="0" max="5" step="0.25" class="ratingInput" placeholder="0–5"> ⭐
+
+        <button class="favBtn">❤️ Add to Favorites</button>
+        <button class="reviewBtn">✍ Add Review</button>
+
+        <a href="https://www.goodreads.com/search?q=${goodreadsQuery}" target="_blank" class="goodreads-btn">
+          View on Goodreads 🔗
+        </a>
+      </li>
     `;
-    list.appendChild(item);
   });
 });
 </script>
